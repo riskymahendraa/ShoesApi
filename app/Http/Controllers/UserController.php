@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class CategoryController
+class UserController
 {
     /**
      * Display a listing of the resource.
