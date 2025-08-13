@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController
@@ -11,7 +12,8 @@ class ProductController
      */
     public function index()
     {
-        //
+        $products = Product::all();
+        return response()->json($products);
     }
 
     /**
@@ -27,7 +29,23 @@ class ProductController
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate
+        ([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'required|exists:brands,id',
+            'stock' => 'required|integer',
+            'image' => 'required|string',
+            'is_new_arrival' => 'required|boolean',
+        ]);
+
+        $product = Product::create($validated);
+        return response()->json([
+            'message' => 'Product created successfully',
+            'data' => $product
+        ]);
     }
 
     /**
@@ -35,7 +53,8 @@ class ProductController
      */
     public function show(string $id)
     {
-        //
+        $product = Product::find($id);
+        return response()->json($product);
     }
 
     /**
@@ -51,7 +70,24 @@ class ProductController
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate
+        ([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'required|exists:brands,id',
+            'stock' => 'required|integer',
+            'image' => 'required|string',
+            'is_new_arrival' => 'required|boolean',
+        ]);
+            $product = Product::find($id);
+            $product->update($validated);
+            return response()->json
+        ([
+            'message' => 'Product updated successfully',
+            'data' => $product
+        ], 200);
     }
 
     /**
@@ -59,6 +95,12 @@ class ProductController
      */
     public function destroy(string $id)
     {
-        //
+        $product = Product::find($id);
+        $product->delete();
+        return response()->json
+        ([
+            'message' => 'Product deleted successfully',
+            'data' => $product
+        ], 200);
     }
 }
