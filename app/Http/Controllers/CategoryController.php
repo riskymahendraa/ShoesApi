@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController
@@ -11,7 +11,8 @@ class CategoryController
      */
     public function index()
     {
-        //
+        $categories = Category::all();
+        return response()->json($categories);
     }
 
     /**
@@ -27,7 +28,17 @@ class CategoryController
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate
+        ([
+            'name' => 'required|string|max:255',
+        ])
+        ;
+        
+        $categories = Category::create($validated);
+        return response()->json([
+            'message' => 'Category created successfully',
+            'data' => $categories
+        ], 201);
     }
 
     /**
@@ -35,7 +46,8 @@ class CategoryController
      */
     public function show(string $id)
     {
-        //
+        $categories = Category::find($id);
+        return response()->json($categories);
     }
 
     /**
@@ -51,7 +63,17 @@ class CategoryController
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate
+        ([
+            'name' => 'required|string|max:255',
+        ]);
+        
+        $categories = Category::find($id);
+        $categories->update($validated);
+        return response()->json([
+            'message' => 'Category updated successfully',
+            'data' => $categories
+        ], 200);
     }
 
     /**
@@ -59,6 +81,11 @@ class CategoryController
      */
     public function destroy(string $id)
     {
-        //
+        $categories = Category::find($id);
+        $categories->delete();
+        return response()->json([
+            'message' => 'Category deleted successfully',
+            'data' => $categories
+        ], 200);
     }
 }

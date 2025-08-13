@@ -3,15 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BrandController;
-
-Route::get('/test-connection', function () {
-    return response()->json([
-        'message' => 'Frontend dan Backend sudah terkoneksi!',
-        'time' => now()->toDateTimeString()
-    ]);
-});
+use App\Http\Controllers\CategoryController;
 
 Route::apiResource('brand', BrandController::class);
+Route::apiResource('category', CategoryController::class);
 
 Route::get('/user', function (Request $request) {
     return $request->user();
