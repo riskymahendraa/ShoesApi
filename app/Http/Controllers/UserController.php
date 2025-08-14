@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class UserController
@@ -60,5 +61,44 @@ class UserController
     public function destroy(string $id)
     {
         //
+    }
+
+    public function login (Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (auth()->attempt($credentials)) {
+            $user = auth()->user();
+            return response()->json([
+                'message' => 'User logged in successfully',
+                'user' => $user
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Invalid credentials'
+            ], 401);
+        }
+    }
+
+    public function register (Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+        ]);
+
+            $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'is_admin' => false,
+            'password' => Hash::make($validated['password'])
+        ]);
+
+        return response()->json([
+            'message' => 'User created successfully',
+            'user' => $user
+        ]);
+
     }
 }
