@@ -45,10 +45,12 @@ class ProductController
 
         
         $product = Product::create($validated);
+        
         $pivotData = [];
         foreach ($validated['sizes'] as $size) {
             $pivotData[$size['id']] = ['stock' => $size['stock']];
         }
+        
         $product->sizes()->attach($pivotData);
         return response()->json([
             'message' => 'Product created successfully',

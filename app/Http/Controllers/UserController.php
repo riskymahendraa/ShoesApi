@@ -63,22 +63,29 @@ class UserController
         //
     }
 
-    public function login (Request $request)
-    {
-        $credentials = $request->only('email', 'password');
+    public function login(Request $request)
+{
+    $credentials = $request->only('email', 'password');
 
-        if (auth()->attempt($credentials)) {
-            $user = auth()->user();
-            return response()->json([
-                'message' => 'User logged in successfully',
-                'user' => $user
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Invalid credentials'
-            ], 401);
-        }
+    if (!auth()->attempt($credentials)) {
+        return response()->json([
+            'message' => 'Invalid credentials'
+        ], 401);
     }
+
+    $user = auth()->user();
+
+    // 🔹 Buat token
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'message' => 'User logged in successfully',
+        'access_token' => $token,
+        'token_type' => 'Bearer',
+        'user' => $user
+    ]);
+}
+
 
     public function register (Request $request)
     {
@@ -95,8 +102,12 @@ class UserController
             'password' => Hash::make($validated['password'])
         ]);
 
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return response()->json([
             'message' => 'User created successfully',
+            'token_type' => 'Bearer',
+            'access_token' => $token,
             'user' => $user
         ]);
 

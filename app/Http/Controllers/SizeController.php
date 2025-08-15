@@ -27,17 +27,17 @@ class SizeController
      */
     public function store(Request $request)
     {
-         {
-        $validated = $request->validate
-        ([
-            'size_value' => 'required|integer',
-        ]);
+        {
+            $validated = $request->validate
+            ([
+                'size_value' => 'required|integer',
+            ]);
 
-        $size = Size::create($validated);
-        return response()->json([
-            'message' => 'Size created successfully',
-            'data' => $size
-        ], 201);
+            $size = Size::create($validated);
+            return response()->json([
+                'message' => 'Size created successfully',
+                'data' => $size
+            ], 201);
     }
 
     }
