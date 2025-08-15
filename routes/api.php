@@ -6,10 +6,12 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SizeController;
 
 Route::apiResource('brand', BrandController::class);
 Route::apiResource('category', CategoryController::class);
 Route::apiResource('product', ProductController::class);
+Route::apiResource('size', SizeController::class);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
 

@@ -4,6 +4,7 @@ namespace App\Models;
 use App\Models\OrderItem;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Size;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,6 +24,11 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function sizes()
+    {
+        return $this->belongsToMany(Size::class, 'product_size', 'product_id', 'size_id')->withPivot('stock');
     }
 
 }

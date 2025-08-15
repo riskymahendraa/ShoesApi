@@ -36,15 +36,23 @@ class ProductController
             'price' => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
-            'stock' => 'required|integer',
             'image' => 'required|string',
+            'sizes' => 'required|array',
+            'sizes.*.id' => 'required|exists:sizes,id',
+            'sizes.*.stock' => 'required|integer|min:1',
             'is_new_arrival' => 'required|boolean',
         ]);
 
+        
         $product = Product::create($validated);
+        $pivotData = [];
+        foreach ($validated['sizes'] as $size) {
+            $pivotData[$size['id']] = ['stock' => $size['stock']];
+        }
+        $product->sizes()->attach($pivotData);
         return response()->json([
             'message' => 'Product created successfully',
-            'data' => $product
+            'data' => $product->load('sizes')
         ]);
     }
 
@@ -77,7 +85,6 @@ class ProductController
             'price' => 'required|numeric',
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
-            'stock' => 'required|integer',
             'image' => 'required|string',
             'is_new_arrival' => 'required|boolean',
         ]);
