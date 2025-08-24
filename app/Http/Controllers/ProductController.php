@@ -64,7 +64,7 @@ class ProductController
     public function show(string $id)
     {
         $product = Product::with(['sizes', 'category', 'brand'])->findOrFail($id);
-    return response()->json($product);
+        return response()->json($product);
     }
 
     /**
