@@ -112,4 +112,10 @@ class ProductController
             'data' => $product
         ], 200);
     }
+
+    public function is_new_arrival()
+    {
+        $products = Product::where('is_new_arrival', true)->get();
+        return response()->json($products);
+    }
 }

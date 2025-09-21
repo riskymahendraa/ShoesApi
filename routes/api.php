@@ -11,6 +11,7 @@ use App\Http\Controllers\SizeController;
 Route::apiResource('brand', BrandController::class);
 Route::apiResource('category', CategoryController::class);
 Route::apiResource('product', ProductController::class);
+Route::get('/new-arrivals', [ProductController::class, 'is_new_arrival']);
 Route::apiResource('size', SizeController::class);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
