@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Brand;
+use App\Models\Product;
 
 class BrandController
 {
@@ -46,7 +47,10 @@ class BrandController
      */
     public function show(string $id)
     {
-        $brand = Brand::find($id);
+        $brand = Brand::with('products')->find($id);
+        if (!$brand) {
+            return response()->json(['message' => 'Brand not found'], 404);
+        }
         return response()->json($brand);
     }
 
